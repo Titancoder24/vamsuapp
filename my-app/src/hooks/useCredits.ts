@@ -11,6 +11,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Alert } from 'react-native';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
+import { canBypassCredits, getDevCredits } from '../utils/devMode';
 
 // Credit costs for each feature
 export const CREDIT_COSTS = {
@@ -32,8 +33,8 @@ interface UserCredits {
 
 export function useCredits() {
     const { user } = useAuth() as { user: { id?: string; email?: string } | null };
-    const [credits, setCredits] = useState<number>(0);
-    const [planType, setPlanType] = useState<string>('free');
+    const [credits, setCredits] = useState<number>(canBypassCredits() ? getDevCredits() : 0);
+    const [planType, setPlanType] = useState<string>(canBypassCredits() ? 'pro' : 'free');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -42,6 +43,14 @@ export function useCredits() {
 
     // Fetch credits from Supabase
     const fetchCredits = useCallback(async () => {
+        // Dev mode bypass
+        if (canBypassCredits()) {
+            setCredits(getDevCredits());
+            setPlanType('pro');
+            setLoading(false);
+            return;
+        }
+
         if (!userId && !userEmail) {
             setCredits(0);
             setPlanType('free');
@@ -88,12 +97,19 @@ export function useCredits() {
 
     // Check if user has enough credits for a feature
     const hasEnoughCredits = useCallback((feature: FeatureType): boolean => {
+        if (canBypassCredits()) return true; // Dev mode bypass
         const cost = CREDIT_COSTS[feature];
         return credits >= cost;
     }, [credits]);
 
     // Deduct credits for using a feature
     const useCredits = useCallback(async (feature: FeatureType): Promise<boolean> => {
+        // Dev mode bypass - no deduction needed
+        if (canBypassCredits()) {
+            console.log(`[DEV] Bypassing credit deduction for ${feature}`);
+            return true;
+        }
+
         const cost = CREDIT_COSTS[feature];
 
         if (credits < cost) {
