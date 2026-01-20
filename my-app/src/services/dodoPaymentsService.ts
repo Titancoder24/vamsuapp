@@ -26,8 +26,9 @@ const DODO_CONFIG = {
     // Business ID
     BUSINESS_ID: 'bus_0NWdKs3BLzg0nKRSCQD1L',
 
-    // Meter ID for tracking AI credit usage
-    METER_ID: 'mtr_ai_credits',
+
+    // Actual Meter ID for tracking AI credit usage
+    METER_ID: 'mtr_0NWfJaySPm0hrjJ8Rjgpz',
 
     // Event name for credit consumption
     EVENT_NAME: 'ai.credit.used',
