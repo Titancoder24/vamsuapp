@@ -321,30 +321,40 @@ export default function HomeScreen({ navigation }) {
         {/* Quick Actions */}
         <View style={styles.quickActions}>
           <TouchableOpacity
-            style={[styles.quickAction, { backgroundColor: theme.colors.surface }]}
+            style={[styles.quickAction, { backgroundColor: theme.colors.surface, opacity: 0.7 }]}
             activeOpacity={0.7}
-            onPress={() => navigation.navigate('QuestionBank')}
+            onPress={() => navigation.navigate('ComingSoon', { feature: 'Practice from Bank' })}
           >
             <View style={[styles.quickActionIconWrapper, { backgroundColor: isDark ? '#312E81' : '#EEF2FF' }]}>
               <Ionicons name="library" size={24} color={theme.colors.primary} />
             </View>
             <View style={styles.quickActionInfo}>
-              <Text style={[styles.quickActionTitle, { color: theme.colors.text }]}>Practice from Bank</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <Text style={[styles.quickActionTitle, { color: theme.colors.text }]}>Practice from Bank</Text>
+                <View style={{ backgroundColor: '#F59E0B', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 }}>
+                  <Text style={{ color: '#FFF', fontSize: 9, fontWeight: '700' }}>SOON</Text>
+                </View>
+              </View>
               <Text style={[styles.quickActionDesc, { color: theme.colors.textSecondary }]}>Review your saved questions</Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color={theme.colors.textSecondary} />
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={[styles.quickAction, { backgroundColor: theme.colors.surface }]}
+            style={[styles.quickAction, { backgroundColor: theme.colors.surface, opacity: 0.7 }]}
             activeOpacity={0.7}
-            onPress={() => navigation.navigate('Progress')}
+            onPress={() => navigation.navigate('ComingSoon', { feature: 'View Progress' })}
           >
             <View style={[styles.quickActionIconWrapper, { backgroundColor: isDark ? '#064E3B' : '#D1FAE5' }]}>
               <Ionicons name="trending-up" size={24} color={theme.colors.success} />
             </View>
             <View style={styles.quickActionInfo}>
-              <Text style={[styles.quickActionTitle, { color: theme.colors.text }]}>View Progress</Text>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
+                <Text style={[styles.quickActionTitle, { color: theme.colors.text }]}>View Progress</Text>
+                <View style={{ backgroundColor: '#F59E0B', paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4 }}>
+                  <Text style={{ color: '#FFF', fontSize: 9, fontWeight: '700' }}>SOON</Text>
+                </View>
+              </View>
               <Text style={[styles.quickActionDesc, { color: theme.colors.textSecondary }]}>Track your improvement</Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color={theme.colors.textSecondary} />
