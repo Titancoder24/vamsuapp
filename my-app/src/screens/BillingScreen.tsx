@@ -95,6 +95,14 @@ export default function BillingScreen() {
         const planName = planType === 'basic' ? 'Basic (₹399/month)' : 'Pro (₹699/month)';
         const monthlyCredits = planType === 'basic' ? 200 : 400;
 
+        // Get product ID
+        const productId = planType === 'pro'
+            ? 'pdt_0NWfIFkWCMpUGhXYfg4aw'  // Pro Plan
+            : 'pdt_0NWfIDvBZePuVfiU5bmom'; // Basic Plan
+
+        // DodoPayments checkout URL
+        const paymentUrl = `https://checkout.dodopayments.com/buy/${productId}?email=${encodeURIComponent(userEmail)}&redirect_url=${encodeURIComponent(returnUrl)}`;
+
         Alert.alert(
             `Subscribe to ${planType === 'basic' ? 'Basic' : 'Pro'} Plan`,
             `${planName}\n\n✓ ${monthlyCredits} AI credits/month\n✓ All AI features\n✓ Cancel anytime\n\nPay with UPI or Card`,
@@ -102,10 +110,24 @@ export default function BillingScreen() {
                 { text: 'Cancel', style: 'cancel' },
                 {
                     text: '💳 Pay Now',
-                    onPress: () => {
-                        const paymentUrl = getSubscriptionPaymentUrl(planType, userEmail, returnUrl);
-                        console.log('[Billing] Opening payment:', paymentUrl);
-                        Linking.openURL(paymentUrl);
+                    onPress: async () => {
+                        console.log('[Billing] Opening payment URL:', paymentUrl);
+                        try {
+                            const canOpen = await Linking.canOpenURL(paymentUrl);
+                            if (canOpen) {
+                                await Linking.openURL(paymentUrl);
+                            } else {
+                                // Fallback: open in browser
+                                if (Platform.OS === 'web') {
+                                    window.open(paymentUrl, '_blank');
+                                } else {
+                                    Alert.alert('Error', 'Cannot open payment page. Please try again.');
+                                }
+                            }
+                        } catch (err) {
+                            console.error('[Billing] Error opening URL:', err);
+                            Alert.alert('Error', 'Failed to open payment page. Please try again.');
+                        }
                     },
                 },
             ]
@@ -118,6 +140,16 @@ export default function BillingScreen() {
             return;
         }
 
+        // Get product ID for credits
+        const productMap: Record<number, string> = {
+            50: 'pdt_0NWfIIB8YCLeExHJxEp0D',
+            120: 'pdt_0NWfIJl53N3g787FepmFP',
+            300: 'pdt_0NWfILvFXsCCRNki0ojs6',
+        };
+
+        const productId = productMap[credits];
+        const paymentUrl = `https://checkout.dodopayments.com/buy/${productId}?email=${encodeURIComponent(userEmail)}&redirect_url=${encodeURIComponent(returnUrl)}`;
+
         Alert.alert(
             `Buy ${packageName}`,
             `₹${price} for ${credits} credits\n\n✓ Credits never expire\n✓ Use on any AI feature\n\nPay with UPI or Card`,
@@ -125,10 +157,23 @@ export default function BillingScreen() {
                 { text: 'Cancel', style: 'cancel' },
                 {
                     text: '💳 Pay Now',
-                    onPress: () => {
-                        const paymentUrl = getCreditPurchaseUrl(credits, userEmail, returnUrl);
-                        console.log('[Billing] Opening payment:', paymentUrl);
-                        Linking.openURL(paymentUrl);
+                    onPress: async () => {
+                        console.log('[Billing] Opening payment URL:', paymentUrl);
+                        try {
+                            const canOpen = await Linking.canOpenURL(paymentUrl);
+                            if (canOpen) {
+                                await Linking.openURL(paymentUrl);
+                            } else {
+                                if (Platform.OS === 'web') {
+                                    window.open(paymentUrl, '_blank');
+                                } else {
+                                    Alert.alert('Error', 'Cannot open payment page. Please try again.');
+                                }
+                            }
+                        } catch (err) {
+                            console.error('[Billing] Error opening URL:', err);
+                            Alert.alert('Error', 'Failed to open payment page. Please try again.');
+                        }
                     },
                 },
             ]
