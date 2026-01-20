@@ -12,7 +12,7 @@ export interface AdminUser {
 export async function verifyCredentials(email: string, password: string): Promise<AdminUser | null> {
     try {
         const supabase = createServerClient();
-        
+
         // Sign in with Supabase
         const { data, error } = await supabase.auth.signInWithPassword({
             email,
@@ -26,7 +26,7 @@ export async function verifyCredentials(email: string, password: string): Promis
 
         // Get user metadata
         const userMetadata = data.user.user_metadata || {};
-        
+
         // Check if user has admin role
         // You can set this in Supabase Dashboard > Authentication > Users > User Metadata
         // Or use Supabase RLS policies to manage admin access
@@ -52,12 +52,12 @@ export async function verifyToken(accessToken: string): Promise<AdminUser | null
         const { createClient } = await import('@supabase/supabase-js');
         const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
         const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-        
+
         if (!supabaseUrl || !supabaseAnonKey) {
             console.error('Missing Supabase environment variables for token verification');
             return null;
         }
-        
+
         // Create client with anon key for token verification
         const supabase = createClient(supabaseUrl, supabaseAnonKey, {
             auth: {
@@ -65,7 +65,7 @@ export async function verifyToken(accessToken: string): Promise<AdminUser | null
                 persistSession: false
             }
         });
-        
+
         const { data: { user }, error } = await supabase.auth.getUser(accessToken);
 
         if (error || !user) {
@@ -97,7 +97,24 @@ export function getTokenFromRequest(request: NextRequest): string | null {
     return request.cookies.get('sb-access-token')?.value || null;
 }
 
+// Check if running on localhost (dev mode)
+function isDevMode(request: NextRequest): boolean {
+    const host = request.headers.get('host') || '';
+    return host.includes('localhost') || host.includes('127.0.0.1') || host.startsWith('192.168');
+}
+
 export async function verifyAuth(request: NextRequest): Promise<AdminUser | null> {
+    // Dev mode bypass - allow access on localhost without auth
+    if (isDevMode(request)) {
+        console.log('[DEV] Bypassing auth for localhost');
+        return {
+            id: 'dev-user',
+            email: 'dev@localhost',
+            name: 'Dev User',
+            role: 'admin',
+        };
+    }
+
     const token = getTokenFromRequest(request);
     if (!token) return null;
     return await verifyToken(token);
