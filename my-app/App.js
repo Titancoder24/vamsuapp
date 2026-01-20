@@ -66,6 +66,9 @@ import { PDFGeneratorScreen, PDFMCQListScreen, AIMCQGeneratorScreen } from './sr
 // Coming Soon Screen
 import ComingSoonScreen from './src/screens/ComingSoonScreen';
 
+// Billing Screen
+import BillingScreen from './src/screens/BillingScreen';
+
 const Stack = createNativeStackNavigator();
 
 // Loading Screen
@@ -149,6 +152,8 @@ const MainNavigator = () => (
     <Stack.Screen name="QuestionSetList" component={QuestionSetListScreen} />
     {/* Coming Soon */}
     <Stack.Screen name="ComingSoon" component={ComingSoonScreen} />
+    {/* Billing */}
+    <Stack.Screen name="Billing" component={BillingScreen} />
   </Stack.Navigator>
 );
 

@@ -216,6 +216,15 @@ export default function HomeScreen({ navigation }) {
             </View>
 
             <View style={styles.headerActions}>
+              {/* Credits Button */}
+              <TouchableOpacity
+                style={[styles.creditsButton, { backgroundColor: '#6366F1' }]}
+                onPress={() => navigation.navigate('Billing')}
+              >
+                <Ionicons name="flash" size={16} color="#FFD700" />
+                <Text style={styles.creditsButtonText}>Credits</Text>
+              </TouchableOpacity>
+
               {/* Notification Bell */}
               <TouchableOpacity
                 style={[styles.iconButton, { backgroundColor: theme.colors.surface }]}
@@ -469,6 +478,24 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 2,
     position: 'relative',
+  },
+  creditsButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    paddingVertical: 10,
+    borderRadius: 20,
+    gap: 6,
+    shadowColor: '#6366F1',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 4,
+  },
+  creditsButtonText: {
+    color: '#fff',
+    fontSize: 13,
+    fontWeight: '700',
   },
   notificationBadge: {
     position: 'absolute',
