@@ -12,18 +12,19 @@
 // ===================== CONFIGURATION =====================
 const DODO_CONFIG = {
     // Use test mode for development, live for production
-    API_URL: __DEV__
-        ? 'https://test.dodopayments.com'
-        : 'https://live.dodopayments.com',
+    API_URL: 'https://test.dodopayments.com',  // Change to live.dodopayments.com for production
 
-    // Product IDs for subscription plans (created in DodoPayments dashboard)
+    // Actual Product IDs from DodoPayments
     PRODUCTS: {
-        BASIC_PLAN: 'prd_basic_upsc_399',
-        PRO_PLAN: 'prd_pro_upsc_699',
-        CREDITS_50: 'prd_credits_50',
-        CREDITS_120: 'prd_credits_120',
-        CREDITS_300: 'prd_credits_300',
+        BASIC_PLAN: 'pdt_0NWfIDvBZePuVfiU5bmom',    // ₹399/month - 200 credits
+        PRO_PLAN: 'pdt_0NWfIFkWCMpUGhXYfg4aw',      // ₹699/month - 400 credits
+        CREDITS_50: 'pdt_0NWfIIB8YCLeExHJxEp0D',    // ₹99 - 50 credits
+        CREDITS_120: 'pdt_0NWfIJl53N3g787FepmFP',   // ₹199 - 120 credits
+        CREDITS_300: 'pdt_0NWfILvFXsCCRNki0ojs6',   // ₹399 - 300 credits
     },
+
+    // Business ID
+    BUSINESS_ID: 'bus_0NWdKs3BLzg0nKRSCQD1L',
 
     // Meter ID for tracking AI credit usage
     METER_ID: 'mtr_ai_credits',
@@ -355,6 +356,7 @@ export function getOverlayCheckoutScript(): string {
 
 /**
  * Get direct payment link URL for subscription
+ * Uses DodoPayments checkout page with product ID
  */
 export function getSubscriptionPaymentUrl(
     planType: 'basic' | 'pro',
@@ -365,15 +367,16 @@ export function getSubscriptionPaymentUrl(
         ? DODO_CONFIG.PRODUCTS.PRO_PLAN
         : DODO_CONFIG.PRODUCTS.BASIC_PLAN;
 
+    // DodoPayments checkout URL format
+    const baseUrl = 'https://checkout.dodopayments.com/buy';
     const params = new URLSearchParams({
-        product: productId,
-        email,
-        currency: 'INR',
-        return_url: returnUrl,
-        payment_methods: 'upi,card',
+        product_id: productId,
+        email: email,
+        redirect_url: returnUrl,
+        quantity: '1',
     });
 
-    return `${DODO_CONFIG.API_URL}/checkout?${params.toString()}`;
+    return `${baseUrl}/${productId}?${params.toString()}`;
 }
 
 /**
@@ -390,15 +393,16 @@ export function getCreditPurchaseUrl(
         300: DODO_CONFIG.PRODUCTS.CREDITS_300,
     };
 
+    const productId = productMap[credits];
+    const baseUrl = 'https://checkout.dodopayments.com/buy';
     const params = new URLSearchParams({
-        product: productMap[credits],
-        email,
-        currency: 'INR',
-        return_url: returnUrl,
-        payment_methods: 'upi,card',
+        product_id: productId,
+        email: email,
+        redirect_url: returnUrl,
+        quantity: '1',
     });
 
-    return `${DODO_CONFIG.API_URL}/checkout?${params.toString()}`;
+    return `${baseUrl}/${productId}?${params.toString()}`;
 }
 
 export { DODO_CONFIG };
