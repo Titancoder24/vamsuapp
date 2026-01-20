@@ -457,7 +457,12 @@ export default function AIMCQGeneratorScreen() {
                     <Ionicons name="arrow-back" size={24} color={theme.colors.text} />
                 </TouchableOpacity>
                 <Text style={[styles.headerTitle, { color: theme.colors.text }]}>AI MCQ Generator</Text>
-                <View style={{ width: 40 }} />
+                <TouchableOpacity
+                    style={[styles.savedBtn, { backgroundColor: theme.colors.primaryLight }]}
+                    onPress={() => navigation.navigate('AIMCQList')}
+                >
+                    <Ionicons name="folder-outline" size={18} color={theme.colors.primary} />
+                </TouchableOpacity>
             </View>
 
             <ScrollView
@@ -467,9 +472,9 @@ export default function AIMCQGeneratorScreen() {
             >
                 {/* Local Storage Info Banner */}
                 <View style={[styles.storageBanner, { backgroundColor: isDark ? '#1A2F1A' : '#D1FAE5', borderColor: isDark ? '#10B981' : '#10B981' }]}>
-                    <Ionicons name="phone-portrait-outline" size={18} color="#10B981" />
+                    <Ionicons name="save-outline" size={18} color="#10B981" />
                     <Text style={[styles.storageBannerText, { color: isDark ? '#A7F3D0' : '#065F46' }]}>
-                        {storageInfo.message}
+                        All generated MCQs are stored locally on your device. Nothing is uploaded to any server.
                     </Text>
                 </View>
 
@@ -797,4 +802,7 @@ const styles = StyleSheet.create({
     // Local storage banner
     storageBanner: { flexDirection: 'row', alignItems: 'center', gap: 10, padding: 12, borderRadius: 10, borderWidth: 1, marginBottom: 16 },
     storageBannerText: { flex: 1, fontSize: 12, lineHeight: 18 },
+
+    // Header button
+    savedBtn: { width: 40, height: 40, borderRadius: 12, justifyContent: 'center', alignItems: 'center' },
 });

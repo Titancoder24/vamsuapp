@@ -932,7 +932,12 @@ export default function PDFGeneratorScreen() {
                 <Text style={[styles.headerTitle, { color: theme.colors.text }]}>
                     PDF to MCQ Generator
                 </Text>
-                <View style={{ width: 40 }} />
+                <TouchableOpacity
+                    style={[styles.savedBtn, { backgroundColor: theme.colors.primaryLight }]}
+                    onPress={() => navigation.navigate('PDFMCQList')}
+                >
+                    <Ionicons name="folder-outline" size={18} color={theme.colors.primary} />
+                </TouchableOpacity>
             </View>
 
             <ScrollView
@@ -942,9 +947,9 @@ export default function PDFGeneratorScreen() {
             >
                 {/* Local Storage Info Banner */}
                 <View style={[styles.storageBanner, { backgroundColor: isDark ? '#1A2F1A' : '#D1FAE5', borderColor: '#10B981' }]}>
-                    <Ionicons name="phone-portrait-outline" size={18} color="#10B981" />
+                    <Ionicons name="save-outline" size={18} color="#10B981" />
                     <Text style={[styles.storageBannerText, { color: isDark ? '#A7F3D0' : '#065F46' }]}>
-                        📱 All generated MCQs are stored locally on your device. Nothing is uploaded to any server.
+                        All generated MCQs are stored locally on your device. Nothing is uploaded to any server.
                     </Text>
                 </View>
 
@@ -1627,5 +1632,14 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 12,
         lineHeight: 18
+    },
+
+    // Saved button
+    savedBtn: {
+        width: 40,
+        height: 40,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 });

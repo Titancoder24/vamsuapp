@@ -61,7 +61,7 @@ import {
 } from './src/features/Notes';
 
 // PDF MCQ Screens
-import { PDFGeneratorScreen, PDFMCQListScreen, AIMCQGeneratorScreen } from './src/features/PDFMCQ';
+import { PDFGeneratorScreen, PDFMCQListScreen, AIMCQGeneratorScreen, AIMCQListScreen } from './src/features/PDFMCQ';
 
 // Coming Soon Screen
 import ComingSoonScreen from './src/screens/ComingSoonScreen';
@@ -148,6 +148,7 @@ const MainNavigator = () => (
     <Stack.Screen name="PDFMCQList" component={PDFMCQListScreen} />
     {/* AI MCQ Generator (without PDF upload) */}
     <Stack.Screen name="AIMCQGenerator" component={AIMCQGeneratorScreen} />
+    <Stack.Screen name="AIMCQList" component={AIMCQListScreen} />
     <Stack.Screen name="QuestionPaper" component={QuestionPaperScreen} />
     <Stack.Screen name="QuestionSetList" component={QuestionSetListScreen} />
     {/* Coming Soon */}

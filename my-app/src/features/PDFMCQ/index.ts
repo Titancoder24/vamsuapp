@@ -14,6 +14,7 @@
 export { default as PDFGeneratorScreen } from './screens/PDFGeneratorScreen';
 export { default as PDFMCQListScreen } from './screens/PDFMCQListScreen';
 export { default as AIMCQGeneratorScreen } from './screens/AIMCQGeneratorScreen';
+export { default as AIMCQListScreen } from './screens/AIMCQListScreen';
 
 // Utilities
 export * from './utils/pdfMCQStorage';
